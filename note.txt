@@ -1,0 +1,18 @@
+process.exit(1)
+ match: [/.+\@.+\..+/,"Please enter a valid email address"]
+  email:{
+        type: String,
+        required: true,
+        unique: true,
+        trim: true, kya hai
+        match: [/.+\@.+\..+/,"Please enter a valid email address"]
+    }
+
+
+     role:{
+        type: String,
+        enum:["customer","admin"],
+        default: 'customer',
+    },
+
+    {timestamps:true}
