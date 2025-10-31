@@ -234,5 +234,83 @@ router.get("/", async (req, res) => {
 });
 
 
+//@route get /api/product/best-seller
+//@desc retrive the product with highst rating
+//@access public 
+router.get("/best-seller",async(req,res)=>{
+  try{
+   const bestSeller = await Product.findOne().sort({rating:-1})
+   if(bestSeller){
+    res.json(bestSeller)
+   }else{
+    res.status(404).json({message:"no best seller found"})
+   }
+  }catch(error){
+    console.error(error);
+    res.status(500).send("Server error")
+    
+  }
+})
+
+//@route get /api/product/new-arrivals
+//@desc retrive lates 8 product creation date
+//access public
+router.get("/new-arrivals",async(req,res)=>{
+  try{
+    //fetch latest 8 products
+    const newArrivals  = await Product.find().sort({createdAt:-1}).limit(8);
+    res.json(newArrivals);
+  }catch(error){
+    console.error(error);
+    res.status(500).send("server error")
+    
+  }
+})
+
+
+
+//@route GET /api/product/:id
+//@desc Get a single product by ID
+// @access public
+router.get("/:id",async(req,res)=>{
+  try{
+    const product  = await Product.findById(req.params.id);
+    if(product){
+      res.json(product);
+    }else{
+      res.status(404).json({message:"Procuct Not Found"});
+    }
+  }catch(error){
+    console.error(error);
+    res.status(500).send("server error")
+  }
+})
+
+//@route GET /api/product/similar/:id
+//@desc Retrive similar products based on the current product gender and category
+//@access public
+router.get("/similar/:id",async(req,res)=>{
+  const{id} = req.params;
+ try{
+  const product = await Product.findById(id);
+  if(!product){
+    return res.status(404).json({message:"product not found"});
+  }
+  const similarProducts= await Product.find({
+    id:{$ne:id},
+    gender: product.gender,
+    category: product.category
+  }).limit(4)
+
+  res.json(similarProducts);
+ }catch(error){
+  console.error(error);
+  res.status(500).send("Server error")
+ }
+  
+})
+
+
+
 module.exports = router;
 
