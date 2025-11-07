@@ -8,8 +8,8 @@ const router = express.Router()
 //@route POST /api/checkout
 //@desc Create a new checkout session
 //@access private
-router.post("/",async(req,res)=>{
-    const {checkoutItems,shippingAddress,paymentMethord, totalPrice} = req.body;
+router.post("/",protect,async(req,res)=>{
+    const {checkoutItems,shippingAddress,paymentMethod, totalPrice} = req.body;
 
     if(!checkoutItems || checkoutItems.length === 0){
         return res.status(400).json({message:"no itme in checkout"});
@@ -18,10 +18,10 @@ router.post("/",async(req,res)=>{
     try{
         //create a new checkout session
         const newCheckout = await Checkout.create({
-            user:req.user.id,
+           user: req.user.id,   
             checkoutItems: checkoutItems,
             shippingAddress,
-            paymentMethord,
+            paymentMethod,
             totalPrice,
             paymentStatus:"pending",
             isPaid:false,
@@ -82,7 +82,7 @@ router.post("/:id/finalize",protect,async(req,res)=>{
                 user:checkout.user,
                 orderItems:checkout.orderItems,
                 shippingAddress: checkout.shippingAddress,
-                paymentMethord:checkout.paymentMethord,
+                paymentMethod:checkout.paymentMethod,
                 totalPrice:checkout.totalPrice,
                 isPaid:true,
                 isPaid:true,
@@ -110,4 +110,4 @@ router.post("/:id/finalize",protect,async(req,res)=>{
     }
 })
 
-module.exports = router
+module.exports = router;
