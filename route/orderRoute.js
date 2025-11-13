@@ -10,6 +10,7 @@ const router = express.Router();
 router.get("/my-orders",protect,async(req,res)=>{
     try{
         //find orders for the authenticated user
+        console.log("Authenticated user:", req.user);
         const orders = await Order.find({user:req.user.id}).sort({
             createdAt:-1,
         })//sort by most recent orders

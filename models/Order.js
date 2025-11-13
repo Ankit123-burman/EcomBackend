@@ -3,46 +3,28 @@ const mongoose = require("mongoose");
 const orderItemSchema = new mongoose.Schema({
   productId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Product",       // Refers to Product collection
+    ref: "Product",
     required: true
   },
-  name: {
-    type: String,
-    required: true         // Product name
-  },
-  image: {
-    type: String,
-    required: true         // URL of the product image
-  },
-  price: {
-    type: Number,
-    required: true         // Price of the product
-  },
-  size: {
-    type: String,          // Optional (e.g., S, M, L, XL for clothing)
-    default: null
-  },
-  color: {
-    type: String,          // Optional (e.g., Red, Blue, Black)
-    default: null
-  },
-  quantity: {
-    type: Number,
-    required: true,        // Quantity in the order
-    min: 1
-  }
-});
+  name: { type: String, required: true },
+  image: { type: String, required: true },
+  price: { type: Number, required: true },
+  size: { type: String },
+  color: { type: String },
+  quantity: { type: Number, required: true, min: 1 },
+},
+{id: false}
+);
 
 const orderSchema = new mongoose.Schema(
   {
     user: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User", // User who placed the order
+      ref: "User", // ✅ Correct reference to the User model
       required: true,
     },
     orderItems: {
-      type: [orderItemSchema], // Array of order items
-      required: true,
+      type: [orderItemSchema],
     },
     shippingAddress: {
       address: { type: String, required: true },
@@ -52,7 +34,7 @@ const orderSchema = new mongoose.Schema(
     },
     paymentMethod: {
       type: String,
-      required: true, // e.g., 'Credit Card', 'PayPal', 'UPI'
+      required: true,
     },
     totalPrice: {
       type: Number,
@@ -74,7 +56,6 @@ const orderSchema = new mongoose.Schema(
     },
     paymentStatus: {
       type: String,
-    //   enum: ["pending", "paid", "failed"],
       default: "pending",
     },
     status: {
@@ -84,9 +65,9 @@ const orderSchema = new mongoose.Schema(
     },
   },
   {
-    timestamps: true, // Auto-created createdAt & updatedAt
+    timestamps: true,
   }
 );
 
-
-module.exports = mongoose.model("OrderItem", orderItemSchema);
+// ✅ Correct export:
+module.exports = mongoose.model("Order", orderSchema);

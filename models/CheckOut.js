@@ -18,6 +18,10 @@ const checkoutItemSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
+  quantity:{
+    type: Number,
+    required: true
+  }
 }, { id: false });
 
 const checkoutSchema = new mongoose.Schema({
@@ -26,7 +30,7 @@ const checkoutSchema = new mongoose.Schema({
     ref: "User",
     required: true,
   },
-  checkoutItem: [checkoutItemSchema],
+  checkoutItems: [checkoutItemSchema],
   shippingAddress: {
     address: { type: String, required: true },
     city: { type: String, required: true },
@@ -53,7 +57,7 @@ const checkoutSchema = new mongoose.Schema({
     default: "pending",
   },
   paymentDetails: {
-    type: mongoose.Schema.Types.Mixed,
+    type: mongoose.Schema.Types.Mixed, //store payment-related detals and transction id
   },
   isFinalized: {
     type: Boolean,
