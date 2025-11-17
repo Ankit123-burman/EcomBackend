@@ -78,7 +78,7 @@ router.delete("/:id",protect,admin,async(req,res)=>{
         }
     }catch(error){
         console.error(error);
-        res.status(500).json({message:"server"})
+        res.status(500).json({message:"server err "})
     }
 })
 
